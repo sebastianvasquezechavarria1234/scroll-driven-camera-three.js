@@ -15,6 +15,7 @@ let model;
 let orbitControls;
 let isFree = false;
 let freeTarget = { pos: new THREE.Vector3(), target: new THREE.Vector3(), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 0, 0 ) };
+let savedRawT = 0;
 
 const clock = new THREE.Clock();
 const container = document.getElementById( 'container' );
@@ -197,18 +198,25 @@ function updateOverlay() {
 
 overlayBtn.addEventListener( 'click', () => {
 	isFree = true;
+	savedRawT = getScrollProgress();
 	document.getElementById( 'overlay' ).classList.add( 'hidden' );
 	document.getElementById( 'close-btn' ).style.display = 'block';
 	lenis.stop();
 
-	const wp = cameraPath[ lastSessionIndex ] || cameraPath[ 0 ];
-	freeTarget.pos.copy( wp.pos );
-	freeTarget.target.copy( wp.target );
+	const rt = remapProgress( savedRawT );
+	const segs = cameraPath.length - 1;
+	const s = Math.min( Math.floor( rt * segs ), segs - 1 );
+	const lt = ( rt * segs ) - s;
+	const f = cameraPath[ s ];
+	const t = cameraPath[ s + 1 ];
+
+	freeTarget.pos.copy( lerpVector3( f.pos, t.pos, lt ) );
+	freeTarget.target.copy( lerpVector3( f.target, t.target, lt ) );
 	freeTarget.modelPos.set( 1, 1, 0 );
 	freeTarget.modelRot.set( 0, 0, 0 );
 
 	orbitControls = new OrbitControls( camera, renderer.domElement );
-	orbitControls.target.copy( wp.target );
+	orbitControls.target.copy( freeTarget.target );
 	orbitControls.enableDamping = true;
 	orbitControls.dampingFactor = 0.08;
 	orbitControls.update();
@@ -216,12 +224,47 @@ overlayBtn.addEventListener( 'click', () => {
 
 document.getElementById( 'close-btn' ).addEventListener( 'click', () => {
 	isFree = false;
-	document.getElementById( 'overlay' ).classList.remove( 'hidden' );
-	document.getElementById( 'close-btn' ).style.display = 'none';
-	lenis.start();
 
-	orbitControls.dispose();
-	orbitControls = null;
+	const blurOverlay = document.getElementById( 'blur-overlay' );
+	blurOverlay.style.display = 'block';
+	requestAnimationFrame( () => {
+		blurOverlay.classList.add( 'active' );
+	} );
+
+	const rt = remapProgress( savedRawT );
+	const segs = cameraPath.length - 1;
+	const s = Math.min( Math.floor( rt * segs ), segs - 1 );
+	const lt = ( rt * segs ) - s;
+	const f = cameraPath[ s ];
+	const t = cameraPath[ s + 1 ];
+
+	setTimeout( () => {
+		camera.position.copy( lerpVector3( f.pos, t.pos, lt ) );
+		camera.lookAt( lerpVector3( f.target, t.target, lt ) );
+
+		if ( model ) {
+			model.position.copy( lerpVector3( f.modelPos, t.modelPos, lt ) );
+			model.rotation.copy( lerpEuler( f.modelRot, t.modelRot, lt ) );
+		}
+
+		overlayTitle.textContent = f.title;
+		overlayDesc.textContent = f.desc;
+		overlayBtn.textContent = f.btn || 'Explorar';
+		lastSessionIndex = s;
+
+		if ( orbitControls ) {
+			orbitControls.dispose();
+			orbitControls = null;
+		}
+
+		blurOverlay.classList.remove( 'active' );
+		setTimeout( () => {
+			blurOverlay.style.display = 'none';
+			document.getElementById( 'overlay' ).classList.remove( 'hidden' );
+			document.getElementById( 'close-btn' ).style.display = 'none';
+			lenis.start();
+		}, 500 );
+	}, 500 );
 } );
 
 const dracoLoader = new DRACOLoader();
@@ -273,15 +316,31 @@ function animate( time ) {
 		return;
 	}
 
-	lenis.raf( time );
-
 	mixer.update( delta );
 
-	updateCameraFromScroll();
+	const rawT = getScrollProgress();
+	const t = remapProgress( rawT );
+	const segments = cameraPath.length - 1;
+	const segment = Math.min( Math.floor( t * segments ), segments - 1 );
+	const localT = ( t * segments ) - segment;
+	const from = cameraPath[ segment ];
+	const to = cameraPath[ segment + 1 ];
+
+	const targetPos = lerpVector3( from.pos, to.pos, localT );
+	const targetLook = lerpVector3( from.target, to.target, localT );
+
+	lenis.raf( time );
+
+	camera.position.copy( targetPos );
+	camera.lookAt( targetLook );
+
+	if ( model ) {
+		model.position.copy( lerpVector3( from.modelPos, to.modelPos, localT ) );
+		model.rotation.copy( lerpEuler( from.modelRot, to.modelRot, localT ) );
+	}
+
 	updateOverlay();
-
 	stats.update();
-
 	renderer.render( scene, camera );
 
 }
