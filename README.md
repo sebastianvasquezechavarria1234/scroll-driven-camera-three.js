@@ -27,13 +27,6 @@ The result is a guided tour around Glen Fox's *Littlest Tokyo* diorama, with smo
 
 ---
 
-## Demo
-
-https://github.com/user-attachments/assets/YOUR_ASSET_ID
-
-*A screencast or GIF would go here. Open the project locally and scroll through the experience.*
-
----
 
 ## Tech Stack
 
