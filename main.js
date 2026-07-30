@@ -369,7 +369,6 @@ function animate( time ) {
 			model.rotation.z += ( freeTarget.modelRot.z - model.rotation.z ) * 0.05;
 		}
 		mixer.update( delta );
-		stats.update();
 		renderer.render( scene, camera );
 		return;
 	}
@@ -398,7 +397,6 @@ function animate( time ) {
 	}
 
 	updateOverlay();
-	stats.update();
 	renderer.render( scene, camera );
 
 }
