@@ -1,11 +1,8 @@
+![Preview](/img/preview.jpg)
 # Keyframe Scroll Odyssey
 
 > A scroll-driven 3D narrative experience built with Three.js — where each scroll position reveals a new perspective, and every session tells its own story.
 
-[![Three.js](https://img.shields.io/badge/Three.js-0.170.0-000?logo=threedotjs)](https://threejs.org)
-[![Lenis](https://img.shields.io/badge/Lenis-1.1.18-8B5CF6)](https://lenis.darkroom.engineering)
-[![GLTF](https://img.shields.io/badge/model-Littlest%20Tokyo-4ade80)](https://artstation.com/artwork/1AGwX)
-[![License](https://img.shields.io/badge/license-MIT-f5f5f5)](#license)
 
 ---
 
