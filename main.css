@@ -135,6 +135,23 @@ a {
     transition: opacity 0.4s ease, backdrop-filter 0.6s ease, -webkit-backdrop-filter 0.6s ease, background 0.6s ease;
 }
 
+#footer-links {
+	position: fixed;
+	bottom: 20px;
+	left: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	z-index: 99999;
+	pointer-events: none;
+}
+
+#footer-links .btn {
+	font-style: italic;
+	text-decoration: underline;
+	pointer-events: auto;
+}
+
 #blur-overlay.active {
     opacity: 1;
     backdrop-filter: blur(30px) brightness(0.6);
