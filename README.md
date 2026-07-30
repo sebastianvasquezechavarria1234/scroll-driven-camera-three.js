@@ -183,7 +183,9 @@ const hold = 0.035;   // 3.5% hold per side. Increase for longer pauses.
 - **Inspiration** — The original [Three.js keyframes example](https://threejs.org/examples/webgl_animation_keyframes.html).
 
 ---
+ 
+<div align="center">
 
-## License
+Made with ❤️ by <a href="https://sebas-dev.vercel.app/" target="_blank" rel="noopener noreferrer">Sebastián V</a>
 
-MIT — feel free to use, adapt, and share.
+</div>
