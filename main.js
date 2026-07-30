@@ -141,34 +141,32 @@ function exitChars( el, callback ) {
 	if ( !chars.length ) { callback(); return; }
 
 	chars.forEach( ( c, i ) => {
-		c.style.transition = `all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
-		c.style.transitionDelay = `${i * 15}ms`;
+		c.style.transition = `all 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+		c.style.transitionDelay = `${i * 5}ms`;
 		c.style.opacity = '0';
-		c.style.transform = 'translateY(-40px)';
+		c.style.transform = 'translateY(-20px)';
 	} );
 
-	setTimeout( callback, chars.length * 15 + 450 );
+	setTimeout( callback, chars.length * 5 + 200 );
 }
 
 function enterChars( el, text, delay = 0 ) {
 	el.innerHTML = '';
-	el.style.display = 'inline-block';
 
 	[ ...text ].forEach( ( char, i ) => {
 		const span = document.createElement( 'span' );
 		span.className = 'char';
 		span.textContent = char === ' ' ? '\u00A0' : char;
 		span.style.display = 'inline-block';
-		span.style.transition = `all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
-		span.style.transitionDelay = `${delay + i * 20}ms`;
 		span.style.opacity = '0';
 		span.style.transform = 'translateY(40px)';
 		el.appendChild( span );
 
-		requestAnimationFrame( () => {
+		setTimeout( () => {
+			span.style.transition = `all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
 			span.style.opacity = '1';
 			span.style.transform = 'translateY(0)';
-		} );
+		}, delay + i * 3 );
 	} );
 }
 
@@ -189,7 +187,7 @@ function updateOverlay() {
 	const wp = cameraPath[ index ];
 
 	animateText( overlayTitle, wp.title, 0 );
-	animateText( overlayDesc, wp.desc, 100 );
+	animateText( overlayDesc, wp.desc, 30 );
 	overlayBtn.textContent = wp.btn || 'Explorar';
 }
 
