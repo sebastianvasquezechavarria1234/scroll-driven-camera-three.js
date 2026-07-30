@@ -8,9 +8,13 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 
 import Lenis from 'lenis';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 let mixer;
 let model;
+let orbitControls;
+let isFree = false;
+let freeTarget = { pos: new THREE.Vector3(), target: new THREE.Vector3(), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 0, 0 ) };
 
 const clock = new THREE.Clock();
 const container = document.getElementById( 'container' );
@@ -150,7 +154,7 @@ function exitChars( el, callback ) {
 	setTimeout( callback, chars.length * 5 + 200 );
 }
 
-function enterChars( el, text, delay = 0 ) {
+function enterChars( el, text, delay = 0, stagger = 15 ) {
 	el.innerHTML = '';
 
 	[ ...text ].forEach( ( char, i ) => {
@@ -166,15 +170,15 @@ function enterChars( el, text, delay = 0 ) {
 			span.style.transition = `all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
 			span.style.opacity = '1';
 			span.style.transform = 'translateY(0)';
-		}, delay + i * 3 );
+		}, delay + i * stagger );
 	} );
 }
 
-function animateText( el, newText, delay = 0 ) {
+function animateText( el, newText, delay = 0, stagger = 15 ) {
 	if ( el.dataset.text === newText ) return;
 	el.dataset.text = newText;
 
-	exitChars( el, () => enterChars( el, newText, delay ) );
+	exitChars( el, () => enterChars( el, newText, delay, stagger ) );
 }
 
 function updateOverlay() {
@@ -186,10 +190,39 @@ function updateOverlay() {
 
 	const wp = cameraPath[ index ];
 
-	animateText( overlayTitle, wp.title, 0 );
-	animateText( overlayDesc, wp.desc, 30 );
+	animateText( overlayTitle, wp.title, 0, 25 );
+	animateText( overlayDesc, wp.desc, 30, 3 );
 	overlayBtn.textContent = wp.btn || 'Explorar';
 }
+
+overlayBtn.addEventListener( 'click', () => {
+	isFree = true;
+	document.getElementById( 'overlay' ).classList.add( 'hidden' );
+	document.getElementById( 'close-btn' ).style.display = 'block';
+	lenis.stop();
+
+	const wp = cameraPath[ lastSessionIndex ] || cameraPath[ 0 ];
+	freeTarget.pos.copy( wp.pos );
+	freeTarget.target.copy( wp.target );
+	freeTarget.modelPos.set( 1, 1, 0 );
+	freeTarget.modelRot.set( 0, 0, 0 );
+
+	orbitControls = new OrbitControls( camera, renderer.domElement );
+	orbitControls.target.copy( wp.target );
+	orbitControls.enableDamping = true;
+	orbitControls.dampingFactor = 0.08;
+	orbitControls.update();
+} );
+
+document.getElementById( 'close-btn' ).addEventListener( 'click', () => {
+	isFree = false;
+	document.getElementById( 'overlay' ).classList.remove( 'hidden' );
+	document.getElementById( 'close-btn' ).style.display = 'none';
+	lenis.start();
+
+	orbitControls.dispose();
+	orbitControls = null;
+} );
 
 const dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderPath( 'https://unpkg.com/three@0.170.0/examples/jsm/libs/draco/' );
@@ -224,9 +257,23 @@ window.onresize = function () {
 
 function animate( time ) {
 
-	lenis.raf( time );
-
 	const delta = clock.getDelta();
+
+	if ( isFree ) {
+		if ( orbitControls ) orbitControls.update();
+		if ( model ) {
+			model.position.lerp( freeTarget.modelPos, 0.05 );
+			model.rotation.x += ( freeTarget.modelRot.x - model.rotation.x ) * 0.05;
+			model.rotation.y += ( freeTarget.modelRot.y - model.rotation.y ) * 0.05;
+			model.rotation.z += ( freeTarget.modelRot.z - model.rotation.z ) * 0.05;
+		}
+		mixer.update( delta );
+		stats.update();
+		renderer.render( scene, camera );
+		return;
+	}
+
+	lenis.raf( time );
 
 	mixer.update( delta );
 

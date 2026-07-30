@@ -89,3 +89,29 @@ a {
 #overlay button:hover {
     background: rgba(255,255,255,0.2);
 }
+
+#overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#close-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 300;
+    display: none;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: rgba(0,0,0,0.3);
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    mix-blend-mode: difference;
+    transition: all 0.3s ease;
+}
+
+#close-btn:hover {
+    background: rgba(0,0,0,0.5);
+}
