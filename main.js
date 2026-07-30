@@ -51,6 +51,65 @@ const pmremGenerator = new THREE.PMREMGenerator( renderer );
 const environment = pmremGenerator.fromScene( sky ).texture;
 scene.environment = environment;
 
+function createCloudTexture() {
+	const canvas = document.createElement( 'canvas' );
+	canvas.width = 128;
+	canvas.height = 128;
+	const ctx = canvas.getContext( '2d' );
+
+	const gradient = ctx.createRadialGradient( 64, 64, 0, 64, 64, 64 );
+	gradient.addColorStop( 0, 'rgba(255,255,255,0.9)' );
+	gradient.addColorStop( 0.2, 'rgba(255,255,255,0.7)' );
+	gradient.addColorStop( 0.5, 'rgba(255,255,255,0.3)' );
+	gradient.addColorStop( 0.8, 'rgba(255,255,255,0.1)' );
+	gradient.addColorStop( 1, 'rgba(255,255,255,0)' );
+
+	ctx.fillStyle = gradient;
+	ctx.fillRect( 0, 0, 128, 128 );
+
+	const texture = new THREE.CanvasTexture( canvas );
+	return texture;
+}
+
+const cloudTexture = createCloudTexture();
+
+function createCloud( x, y, z, scale = 1 ) {
+	const group = new THREE.Group();
+	const mat = new THREE.SpriteMaterial( { map: cloudTexture, transparent: true, opacity: 0.6, depthWrite: false, blending: THREE.NormalBlending } );
+
+	const positions = [
+		[ 0, 0, 0, 1.2 ],
+		[ 1.5, 0.3, 0.5, 1 ],
+		[ -1.3, -0.2, 0.8, 0.9 ],
+		[ 0.8, 0.5, 1.2, 0.7 ],
+		[ -0.5, 0.4, -1.5, 0.8 ],
+		[ 1.8, -0.3, -1, 0.6 ],
+	];
+
+	positions.forEach( ( [ px, py, pz, s ] ) => {
+		const sprite = new THREE.Sprite( mat.clone() );
+		sprite.position.set( px, py, pz );
+		sprite.scale.setScalar( s * scale * 1.5 );
+		sprite.material.opacity = 0.15 + Math.random() * 0.35;
+		group.add( sprite );
+	} );
+
+	group.position.set( x, y, z );
+	return group;
+}
+
+const clouds = [
+	createCloud( -15, 9, -12, 2 ),
+	createCloud( 12, 10, -15, 2.5 ),
+	createCloud( 22, 8, 5, 2.2 ),
+	createCloud( -8, 11, 18, 1.8 ),
+	createCloud( -22, 9, 10, 2.5 ),
+	createCloud( 18, 10, -10, 1.5 ),
+	createCloud( 0, 12, 20, 2 ),
+	createCloud( -25, 8, -5, 2.8 ),
+];
+clouds.forEach( c => scene.add( c ) );
+
 const camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 100 );
 camera.position.set( 5, 2, 8 );
 
@@ -225,12 +284,6 @@ overlayBtn.addEventListener( 'click', () => {
 document.getElementById( 'close-btn' ).addEventListener( 'click', () => {
 	isFree = false;
 
-	const blurOverlay = document.getElementById( 'blur-overlay' );
-	blurOverlay.style.display = 'block';
-	requestAnimationFrame( () => {
-		blurOverlay.classList.add( 'active' );
-	} );
-
 	const rt = remapProgress( savedRawT );
 	const segs = cameraPath.length - 1;
 	const s = Math.min( Math.floor( rt * segs ), segs - 1 );
@@ -238,33 +291,26 @@ document.getElementById( 'close-btn' ).addEventListener( 'click', () => {
 	const f = cameraPath[ s ];
 	const t = cameraPath[ s + 1 ];
 
-	setTimeout( () => {
-		camera.position.copy( lerpVector3( f.pos, t.pos, lt ) );
-		camera.lookAt( lerpVector3( f.target, t.target, lt ) );
+	camera.position.copy( lerpVector3( f.pos, t.pos, lt ) );
+	camera.lookAt( lerpVector3( f.target, t.target, lt ) );
 
-		if ( model ) {
-			model.position.copy( lerpVector3( f.modelPos, t.modelPos, lt ) );
-			model.rotation.copy( lerpEuler( f.modelRot, t.modelRot, lt ) );
-		}
+	if ( model ) {
+		model.position.copy( lerpVector3( f.modelPos, t.modelPos, lt ) );
+		model.rotation.copy( lerpEuler( f.modelRot, t.modelRot, lt ) );
+	}
 
-		overlayTitle.textContent = f.title;
-		overlayDesc.textContent = f.desc;
-		overlayBtn.textContent = f.btn || 'Explorar';
-		lastSessionIndex = s;
+	if ( orbitControls ) {
+		orbitControls.dispose();
+		orbitControls = null;
+	}
 
-		if ( orbitControls ) {
-			orbitControls.dispose();
-			orbitControls = null;
-		}
-
-		blurOverlay.classList.remove( 'active' );
-		setTimeout( () => {
-			blurOverlay.style.display = 'none';
-			document.getElementById( 'overlay' ).classList.remove( 'hidden' );
-			document.getElementById( 'close-btn' ).style.display = 'none';
-			lenis.start();
-		}, 500 );
-	}, 500 );
+	document.getElementById( 'overlay' ).classList.remove( 'hidden' );
+	document.getElementById( 'close-btn' ).style.display = 'none';
+	overlayTitle.textContent = f.title;
+	overlayDesc.textContent = f.desc;
+	overlayBtn.textContent = f.btn || 'Explorar';
+	lastSessionIndex = s;
+	lenis.start();
 } );
 
 const dracoLoader = new DRACOLoader();
