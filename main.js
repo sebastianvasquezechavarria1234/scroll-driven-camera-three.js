@@ -50,20 +50,20 @@ const camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.inner
 camera.position.set( 5, 2, 8 );
 
 const cameraPath = [
-	{ pos: new THREE.Vector3( 5, 2, 8 ), target: new THREE.Vector3( 0, 0.7, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 0, 0 ) },
-	{ pos: new THREE.Vector3( 2, 0, 4 ), target: new THREE.Vector3( 2, -1, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 0, 0 ) },
-	{ pos: new THREE.Vector3( -2, 4.5, 2 ), target: new THREE.Vector3( 0.5, 0.8, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 0, 0 ) },
-	{ pos: new THREE.Vector3( -2, 1, 4), target: new THREE.Vector3(2, -2, 0  ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 1, 0 ) },
-	{ pos: new THREE.Vector3( 0, 4.5, 2 ), target: new THREE.Vector3( 1, 0.3, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 2, 0 ) },
-	{ pos: new THREE.Vector3( 2, 1, 5 ), target: new THREE.Vector3( 0, -1, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 3, 0 ) },
-	{ pos: new THREE.Vector3( 2.8, 0, 3 ), target: new THREE.Vector3( 0, -1, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 5.5, 0 ) },
-	{ pos: new THREE.Vector3( 2.3, .6, 4 ), target: new THREE.Vector3( -1.2, -2, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 7, 0 ) },
-	{ pos: new THREE.Vector3( 3, -0.5, 3 ), target: new THREE.Vector3( 0, -0.5, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 7, 0 ) },
-	{ pos: new THREE.Vector3( 1.3, -0.5, 1), target: new THREE.Vector3( 0, -0.5, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 7, 0 ) },
-	{ pos: new THREE.Vector3( 1.5, 5.5, 1 ), target: new THREE.Vector3( 1.5, -0.5, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 7, 0 ) },
-	{ pos: new THREE.Vector3( 3, 0, 3 ), target: new THREE.Vector3( 0, -0.5, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 5.5, 0 ) },
-	{ pos: new THREE.Vector3( 0, 2, 5 ), target: new THREE.Vector3( 0, 0.5, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 0, 0 ) },
-	{ pos: new THREE.Vector3( -2, 4, 9 ), target: new THREE.Vector3( 0, 0.7, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 0, 0 ) },
+	{ pos: new THREE.Vector3( 5, 2, 8 ), target: new THREE.Vector3( 0, 0.7, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 0, 0 ), title: 'Inicio', desc: 'Bienvenido a la escena' },
+	{ pos: new THREE.Vector3( 2, 0, 4 ), target: new THREE.Vector3( 2, -1, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 0, 0 ), title: 'Sesión 1', desc: 'Primera parada' },
+	{ pos: new THREE.Vector3( -2, 4.5, 2 ), target: new THREE.Vector3( 0.5, 0.8, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 0, 0 ), title: 'Sesión 2', desc: 'Vista elevada' },
+	{ pos: new THREE.Vector3( -2, 1, 4), target: new THREE.Vector3(2, -2, 0  ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 1, 0 ), title: 'Sesión 3', desc: 'Giro del modelo' },
+	{ pos: new THREE.Vector3( 0, 4.5, 2 ), target: new THREE.Vector3( 1, 0.3, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 2, 0 ), title: 'Sesión 4', desc: 'Desde arriba' },
+	{ pos: new THREE.Vector3( 2, 1, 5 ), target: new THREE.Vector3( 0, -1, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 3, 0 ), title: 'Sesión 5', desc: 'Vista lateral' },
+	{ pos: new THREE.Vector3( 2.8, 0, 3 ), target: new THREE.Vector3( 0, -1, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 5.5, 0 ), title: 'Sesión 6', desc: 'Acercamiento' },
+	{ pos: new THREE.Vector3( 2.3, .6, 4 ), target: new THREE.Vector3( -1.2, -2, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 7, 0 ), title: 'Sesión 7', desc: 'Rotación completa' },
+	{ pos: new THREE.Vector3( 3, -0.5, 3 ), target: new THREE.Vector3( 0, -0.5, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 7, 0 ), title: 'Sesión 8', desc: 'Nivel del suelo' },
+	{ pos: new THREE.Vector3( 1.3, -0.5, 1), target: new THREE.Vector3( 0, -0.5, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 7, 0 ), title: 'Sesión 9', desc: 'Cerca del modelo' },
+	{ pos: new THREE.Vector3( 1.5, 5.5, 1 ), target: new THREE.Vector3( 1.5, -0.5, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 7, 0 ), title: 'Sesión 10', desc: 'Vista aérea' },
+	{ pos: new THREE.Vector3( 3, 0, 3 ), target: new THREE.Vector3( 0, -0.5, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 5.5, 0 ), title: 'Sesión 11', desc: 'Regresando' },
+	{ pos: new THREE.Vector3( 0, 2, 5 ), target: new THREE.Vector3( 0, 0.5, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 0, 0 ), title: 'Sesión 12', desc: 'Vista frontal' },
+	{ pos: new THREE.Vector3( -2, 4, 9 ), target: new THREE.Vector3( 0, 0.7, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 0, 0 ), title: 'Final', desc: 'Gracias por visitar' },
 ];
 
 function getScrollProgress() {
@@ -130,6 +130,20 @@ function updateCameraFromScroll() {
 	}
 }
 
+const overlayTitle = document.getElementById( 'session-title' );
+const overlayDesc = document.getElementById( 'session-desc' );
+const overlayBtn = document.getElementById( 'session-btn' );
+
+function updateOverlay() {
+	const t = getScrollProgress();
+	const index = Math.min( Math.floor( t * ( cameraPath.length - 1 ) ), cameraPath.length - 1 );
+	const wp = cameraPath[ index ];
+
+	overlayTitle.textContent = wp.title;
+	overlayDesc.textContent = wp.desc;
+	overlayBtn.textContent = wp.btn || 'Explorar';
+}
+
 const dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderPath( 'https://unpkg.com/three@0.170.0/examples/jsm/libs/draco/' );
 
@@ -170,6 +184,7 @@ function animate( time ) {
 	mixer.update( delta );
 
 	updateCameraFromScroll();
+	updateOverlay();
 
 	stats.update();
 
