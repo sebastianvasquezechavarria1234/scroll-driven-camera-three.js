@@ -65,6 +65,32 @@ function getScrollProgress() {
 	return lenis.progress;
 }
 
+function easeInOutCubic( t ) {
+	return t < 0.5 ? 4 * t * t * t : 1 - Math.pow( -2 * t + 2, 3 ) / 2;
+}
+
+function remapProgress( t ) {
+	const n = cameraPath.length;
+	const hold = 0.035;
+	const segments = n - 1;
+	const segSize = 1 / segments;
+
+	const rawSeg = t * segments;
+	const segIdx = Math.min( Math.floor( rawSeg ), segments - 1 );
+	const localT = rawSeg - segIdx;
+
+	const transitionSize = 1 - hold * 2;
+
+	if ( localT < hold ) {
+		return segIdx / segments;
+	} else if ( localT > 1 - hold ) {
+		return ( segIdx + 1 ) / segments;
+	} else {
+		const p = ( localT - hold ) / transitionSize;
+		return ( segIdx + easeInOutCubic( p ) ) / segments;
+	}
+}
+
 function lerpVector3( a, b, t ) {
 	return new THREE.Vector3(
 		a.x + ( b.x - a.x ) * t,
@@ -74,7 +100,7 @@ function lerpVector3( a, b, t ) {
 }
 
 function updateCameraFromScroll() {
-	const t = getScrollProgress();
+	const t = remapProgress( getScrollProgress() );
 	const segments = cameraPath.length - 1;
 	const segment = Math.min( Math.floor( t * segments ), segments - 1 );
 	const localT = ( t * segments ) - segment;
