@@ -1,7 +1,5 @@
 import * as THREE from 'three';
 
-import Stats from 'three/addons/libs/stats.module.js';
-
 import { Sky } from 'three/addons/objects/Sky.js';
 
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -24,9 +22,6 @@ const lenis = new Lenis({
 	lerp: 0.08,
 	smoothWheel: true,
 });
-
-const stats = new Stats();
-container.appendChild( stats.dom );
 
 const renderer = new THREE.WebGLRenderer( { antialias: true } );
 renderer.setPixelRatio( window.devicePixelRatio );
@@ -279,6 +274,17 @@ overlayBtn.addEventListener( 'click', () => {
 	orbitControls.enableDamping = true;
 	orbitControls.dampingFactor = 0.08;
 	orbitControls.update();
+
+	renderer.domElement.style.cursor = 'grab';
+
+	function onGrabDown() { renderer.domElement.style.cursor = 'grabbing'; }
+	function onGrabUp() { renderer.domElement.style.cursor = 'grab'; }
+	renderer.domElement.addEventListener( 'pointerdown', onGrabDown );
+	renderer.domElement.addEventListener( 'pointerup', onGrabUp );
+	renderer.domElement._grabCleanup = () => {
+		renderer.domElement.removeEventListener( 'pointerdown', onGrabDown );
+		renderer.domElement.removeEventListener( 'pointerup', onGrabUp );
+	};
 } );
 
 document.getElementById( 'close-btn' ).addEventListener( 'click', () => {
@@ -302,6 +308,12 @@ document.getElementById( 'close-btn' ).addEventListener( 'click', () => {
 	if ( orbitControls ) {
 		orbitControls.dispose();
 		orbitControls = null;
+	}
+
+	renderer.domElement.style.cursor = '';
+	if ( renderer.domElement._grabCleanup ) {
+		renderer.domElement._grabCleanup();
+		renderer.domElement._grabCleanup = null;
 	}
 
 	document.getElementById( 'overlay' ).classList.remove( 'hidden' );
