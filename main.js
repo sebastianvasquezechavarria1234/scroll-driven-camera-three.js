@@ -7,10 +7,18 @@ import { Sky } from 'three/addons/objects/Sky.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 
+import Lenis from 'lenis';
+
 let mixer;
 
 const clock = new THREE.Clock();
 const container = document.getElementById( 'container' );
+
+const lenis = new Lenis({
+	duration: 1.2,
+	easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+	smoothWheel: true,
+});
 
 const stats = new Stats();
 container.appendChild( stats.dom );
@@ -54,8 +62,7 @@ const cameraPath = [
 ];
 
 function getScrollProgress() {
-	const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-	return maxScroll > 0 ? window.scrollY / maxScroll : 0;
+	return lenis.progress;
 }
 
 function lerpVector3( a, b, t ) {
@@ -111,7 +118,9 @@ window.onresize = function () {
 
 };
 
-function animate() {
+function animate( time ) {
+
+	lenis.raf( time );
 
 	const delta = clock.getDelta();
 
