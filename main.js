@@ -62,8 +62,8 @@ const cameraPath = [
 	{ pos: new THREE.Vector3( 1.3, -0.5, 1), target: new THREE.Vector3( 0, -0.5, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 7, 0 ) },
 	{ pos: new THREE.Vector3( 1.5, 5.5, 1 ), target: new THREE.Vector3( 1.5, -0.5, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 7, 0 ) },
 	{ pos: new THREE.Vector3( 3, 0, 3 ), target: new THREE.Vector3( 0, -0.5, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 5.5, 0 ) },
-	{ pos: new THREE.Vector3( 0, 2, 3 ), target: new THREE.Vector3( 0, 0.5, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 0, 0 ) },
-	{ pos: new THREE.Vector3( -2, 3, 1 ), target: new THREE.Vector3( 0, 0.7, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 0, 0 ) },
+	{ pos: new THREE.Vector3( 0, 2, 5 ), target: new THREE.Vector3( 0, 0.5, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 0, 0 ) },
+	{ pos: new THREE.Vector3( -2, 4, 9 ), target: new THREE.Vector3( 0, 0.7, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 0, 0 ) },
 ];
 
 function getScrollProgress() {
