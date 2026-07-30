@@ -51,8 +51,8 @@ camera.position.set( 5, 2, 8 );
 const cameraPath = [
 	{ pos: new THREE.Vector3( 5, 2, 8 ), target: new THREE.Vector3( 0, 0.7, 0 ) },
 	{ pos: new THREE.Vector3( 2, 0, 4 ), target: new THREE.Vector3( 2, -1, 0 ) },
-	{ pos: new THREE.Vector3( -2, 5, 6 ), target: new THREE.Vector3( 0.5, 0.8, 0 ) },
-	{ pos: new THREE.Vector3( -4, 3, 4 ), target: new THREE.Vector3( 1, 0.5, 0 ) },
+	{ pos: new THREE.Vector3( -2, 4.5, 2 ), target: new THREE.Vector3( 0.5, 0.8, 0 ) },
+	{ pos: new THREE.Vector3( -10, 0, 3 ), target: new THREE.Vector3( 1, 0.5, 0 ) },
 	{ pos: new THREE.Vector3( -3, 1, 2 ), target: new THREE.Vector3( 1, 0.3, 0 ) },
 	{ pos: new THREE.Vector3( 0, 2, 1.5 ), target: new THREE.Vector3( 1, 0.5, 0 ) },
 	{ pos: new THREE.Vector3( 3, 3, 3 ), target: new THREE.Vector3( 0.5, 0.7, 0 ) },
