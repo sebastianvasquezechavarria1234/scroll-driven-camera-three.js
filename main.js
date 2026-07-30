@@ -57,7 +57,7 @@ const cameraPath = [
 	{ pos: new THREE.Vector3( 0, 4.5, 2 ), target: new THREE.Vector3( 1, 0.3, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 2, 0 ) },
 	{ pos: new THREE.Vector3( 2, 1, 5 ), target: new THREE.Vector3( 0, -1, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 3, 0 ) },
 	{ pos: new THREE.Vector3( 2.8, 0, 3 ), target: new THREE.Vector3( 0, -1, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 5.5, 0 ) },
-	{ pos: new THREE.Vector3( 2.5, 5, 0 ), target: new THREE.Vector3( 0, -2, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 5.5, 0 ) },
+	{ pos: new THREE.Vector3( 2.3, .6, 4 ), target: new THREE.Vector3( -1.2, -2, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 7, 0 ) },
 	{ pos: new THREE.Vector3( 5, 2, 8 ), target: new THREE.Vector3( 0, 0.7, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 0, 0 ) },
 ];
 
