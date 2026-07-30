@@ -10,6 +10,7 @@ import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import Lenis from 'lenis';
 
 let mixer;
+let model;
 
 const clock = new THREE.Clock();
 const container = document.getElementById( 'container' );
@@ -49,15 +50,15 @@ const camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.inner
 camera.position.set( 5, 2, 8 );
 
 const cameraPath = [
-	{ pos: new THREE.Vector3( 5, 2, 8 ), target: new THREE.Vector3( 0, 0.7, 0 ) },
-	{ pos: new THREE.Vector3( 2, 0, 4 ), target: new THREE.Vector3( 2, -1, 0 ) },
-	{ pos: new THREE.Vector3( -2, 4.5, 2 ), target: new THREE.Vector3( 0.5, 0.8, 0 ) },
-	{ pos: new THREE.Vector3( -10, 0, 3 ), target: new THREE.Vector3( 1, 0.5, 0 ) },
-	{ pos: new THREE.Vector3( -3, 1, 2 ), target: new THREE.Vector3( 1, 0.3, 0 ) },
-	{ pos: new THREE.Vector3( 0, 2, 1.5 ), target: new THREE.Vector3( 1, 0.5, 0 ) },
-	{ pos: new THREE.Vector3( 3, 3, 3 ), target: new THREE.Vector3( 0.5, 0.7, 0 ) },
-	{ pos: new THREE.Vector3( 4, 1.5, 5 ), target: new THREE.Vector3( 0, 0.6, 0 ) },
-	{ pos: new THREE.Vector3( 5, 2, 8 ), target: new THREE.Vector3( 0, 0.7, 0 ) },
+	{ pos: new THREE.Vector3( 5, 2, 8 ), target: new THREE.Vector3( 0, 0.7, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 0, 0 ) },
+	{ pos: new THREE.Vector3( 2, 0, 4 ), target: new THREE.Vector3( 2, -1, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 0, 0 ) },
+	{ pos: new THREE.Vector3( -2, 4.5, 2 ), target: new THREE.Vector3( 0.5, 0.8, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 0, 0 ) },
+	{ pos: new THREE.Vector3( -2, 4.5, 2), target: new THREE.Vector3( 0, 0, -3 ), modelPos: new THREE.Vector3( 2, 1, 0 ), modelRot: new THREE.Euler( Math.PI / 4, 0, 0 ) },
+	{ pos: new THREE.Vector3( 2, 1, 2 ), target: new THREE.Vector3( 1, 0.3, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 0, 0 ) },
+	{ pos: new THREE.Vector3( 0, 2, 1.5 ), target: new THREE.Vector3( 1, 0.5, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 0, 0 ) },
+	{ pos: new THREE.Vector3( 3, 3, 3 ), target: new THREE.Vector3( 0.5, 0.7, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 0, 0 ) },
+	{ pos: new THREE.Vector3( 4, 1.5, 5 ), target: new THREE.Vector3( 0, 0.6, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 0, 0 ) },
+	{ pos: new THREE.Vector3( 5, 2, 8 ), target: new THREE.Vector3( 0, 0.7, 0 ), modelPos: new THREE.Vector3( 1, 1, 0 ), modelRot: new THREE.Euler( 0, 0, 0 ) },
 ];
 
 function getScrollProgress() {
@@ -98,6 +99,14 @@ function lerpVector3( a, b, t ) {
 	);
 }
 
+function lerpEuler( a, b, t ) {
+	return new THREE.Euler(
+		a.x + ( b.x - a.x ) * t,
+		a.y + ( b.y - a.y ) * t,
+		a.z + ( b.z - a.z ) * t
+	);
+}
+
 function updateCameraFromScroll() {
 	const t = remapProgress( getScrollProgress() );
 	const segments = cameraPath.length - 1;
@@ -109,6 +118,11 @@ function updateCameraFromScroll() {
 
 	camera.position.copy( lerpVector3( from.pos, to.pos, localT ) );
 	camera.lookAt( lerpVector3( from.target, to.target, localT ) );
+
+	if ( model ) {
+		model.position.copy( lerpVector3( from.modelPos, to.modelPos, localT ) );
+		model.rotation.copy( lerpEuler( from.modelRot, to.modelRot, localT ) );
+	}
 }
 
 const dracoLoader = new DRACOLoader();
@@ -118,8 +132,7 @@ const loader = new GLTFLoader();
 loader.setDRACOLoader( dracoLoader );
 loader.load( 'models/gltf/LittlestTokyo.glb', function ( gltf ) {
 
-	const model = gltf.scene;
-	model.position.set( 1, 1, 0 );
+	model = gltf.scene;
 	model.scale.set( 0.01, 0.01, 0.01 );
 	scene.add( model );
 
